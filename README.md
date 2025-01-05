@@ -1,3 +1,45 @@
+## Example webservice project with Flask and React
+
+
+# Deploying the web service project to production
+
+## 1. Installing the nginx locally
+
+> brew install nginx
+
+For Mac, nginx will be installed in the following path:
+>/opt/homebrew/opt/nginx/bin/
+
+Default nginx docroot (folder that nginx load website) is
+>/opt/homebrew/var/www
+
+For configuration of nginx, you need to look at this location.
+> /opt/homebrew/etc/nginx/nginx.conf 
+By default, nginx listen to 8080.
+
+To start the nginx in daemon mode, run this
+>brew services start nginx
+
+nginx will load files in `/opt/homebrew/etc/nginx/servers/`.
+
+If you want to run nginx in forground mode, run this
+>/opt/homebrew/opt/nginx/bin/nginx -g daemon\ off\;
+```
+Docroot is: /opt/homebrew/var/www
+
+The default port has been set in /opt/homebrew/etc/nginx/nginx.conf to 8080 so that
+nginx can run without sudo.
+
+nginx will load all files in /opt/homebrew/etc/nginx/servers/.
+
+To start nginx now and restart at login:
+  brew services start nginx
+Or, if you don't want/need a background service you can just run:
+  /opt/homebrew/opt/nginx/bin/nginx -g daemon\ off\;
+```
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

@@ -3,6 +3,8 @@
 
 # Deploying the web service project to production
 
+## STEP1: install the nginx to load your project directly from the build folder.
+
 ## 1. Installing the nginx locally
 
 > brew install nginx
@@ -19,26 +21,50 @@ By default, nginx listen to 8080.
 
 To start the nginx in daemon mode, run this
 >brew services start nginx
-
 nginx will load files in `/opt/homebrew/etc/nginx/servers/`.
 
 If you want to run nginx in forground mode, run this
 >/opt/homebrew/opt/nginx/bin/nginx -g daemon\ off\;
+
+### change the nginx.conf (/opt/homebrew/etc/nginx/nginx.conf) for local development.
+Since we are not deplying to the actual server with dedicated nginx install(we will explort that option later.), we just want to check if nginx can load our production ready built project directly. 
+
+To do so, we need to instruct nginx to load the index.html from the `\build` folder. Make the following changes in the original `nginx.conf`.
+
 ```
-Docroot is: /opt/homebrew/var/www
+... some other configuration you don't need to touch ....
+http {
+... some other configuration you don't need to touch ....
+    server {
+        listen       8080; --> we are listening to 8080 for development.
+        root /Users/peterhan/workspace/example_webservice/build;
+        index index.html;
 
-The default port has been set in /opt/homebrew/etc/nginx/nginx.conf to 8080 so that
-nginx can run without sudo.
+... some other configuration you don't need to touch ....
 
-nginx will load all files in /opt/homebrew/etc/nginx/servers/.
+        location / {
+            try_files $uri $uri/ =404;
+            #root   html; --> comment that out for now
+            #index  index.html index.htm; --> comment that out for now.
+        }
+... some other configuration you don't need to touch ....
 
-To start nginx now and restart at login:
-  brew services start nginx
-Or, if you don't want/need a background service you can just run:
-  /opt/homebrew/opt/nginx/bin/nginx -g daemon\ off\;
 ```
 
+To restart the nginx after changing the nginx.config, run this command (only for mac)
+```
+$ brew services restart nginx
+--> the following will be printed out.
+Stopping `nginx`... (might take a while)
+==> Successfully stopped `nginx` (label: homebrew.mxcl.nginx)
+==> Successfully started `nginx` (label: homebrew.mxcl.nginx)
 
+$ nginx -s reload
+```
+
+If anything in `nginx.conf` is wrong, it will fail.
+
+Now, open the browser and type `localhost:8080`.
 
 # Getting Started with Create React App
 
